@@ -15,6 +15,42 @@ interface Task {
   progress: number;
 }
 
+const columns: GridColDef[] = [
+  { field: 'title', headerName: 'Title', flex: 1 },
+  { field: 'assignee', headerName: 'Assignee', width: 130 },
+  { field: 'projectName', headerName: 'Project', width: 130 },
+  { field: 'status', headerName: 'Status', width: 130 },
+  { field: 'priority', headerName: 'Priority', width: 130 },
+  { field: 'dueDate', headerName: 'Due Date', width: 130 },
+  { 
+    field: 'progress',
+    headerName: 'Progress',
+    type: 'number',
+    width: 110,
+    valueFormatter: (params: { value: number }) => `${params.value}%`,
+  },
+  {
+    field: 'actions',
+    type: 'actions',
+    headerName: 'Actions',
+    width: 100,
+    getActions: (params: { row: Task }) => [
+      <GridActionsCellItem
+        icon={<EditIcon />}
+        label="Edit"
+        onClick={() => handleEditClick(params.row)}
+        showInMenu={false}
+      />,
+      <GridActionsCellItem
+        icon={<DeleteIcon />}
+        label="Delete"
+        onClick={() => handleDeleteClick(params.row)}
+        showInMenu={false}
+      />,
+    ],
+  },
+];
+
 // Sample data - replace with actual API data
 const sampleTasks: Task[] = [
   { 
@@ -58,42 +94,6 @@ export function Tasks() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<Task>(emptyTask);
-
-  const columns: GridColDef[] = [
-    { field: 'title', headerName: 'Title', flex: 1 },
-    { field: 'assignee', headerName: 'Assignee', width: 130 },
-    { field: 'projectName', headerName: 'Project', width: 130 },
-    { field: 'status', headerName: 'Status', width: 130 },
-    { field: 'priority', headerName: 'Priority', width: 130 },
-    { field: 'dueDate', headerName: 'Due Date', width: 130 },
-    { 
-      field: 'progress',
-      headerName: 'Progress',
-      type: 'number',
-      width: 110,
-      valueFormatter: (params: { value: number }) => `${params.value}%`,
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
-      width: 100,
-      getActions: (params: { row: Task }) => [
-        <GridActionsCellItem
-          icon={<EditIcon />}
-          label="Edit"
-          onClick={() => handleEditClick(params.row)}
-          showInMenu={false}
-        />,
-        <GridActionsCellItem
-          icon={<DeleteIcon />}
-          label="Delete"
-          onClick={() => handleDeleteClick(params.row)}
-          showInMenu={false}
-        />,
-      ],
-    },
-  ];
 
   const handleAddNew = () => {
     setFormData(emptyTask);
@@ -264,4 +264,3 @@ export function Tasks() {
       </Dialog>
     </Box>
   );
-}
